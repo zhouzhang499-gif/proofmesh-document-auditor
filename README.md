@@ -75,7 +75,7 @@ scripts\run.ps1 audit -Path examples\demo_bundle
 
 ![ProofMesh 本地处理架构](assets/architecture.svg)
 
-Qoder 或其他 Agent 负责识别用户意图，ProofMesh 在本机读取文件、建立事实台账并运行核验。确定性规则生成确认问题；RapidFuzz 与 OpenVINO 只把相似指标送进待确认清单。Agent 默认只收到精简摘要，完整证据留在本地报告中。
+Qoder 或其他 Agent 负责识别用户意图，ProofMesh 在本机读取文件、建立事实台账并运行核验。确定性规则生成确认问题；RapidFuzz 与 OpenVINO 只把相似指标送进待确认清单。源文件与完整证据留在本机，精简摘要会进入当前 Agent 对话；宿主是否联网仍以它自己的服务与隐私条款为准。
 
 ## 报告为什么这样写
 

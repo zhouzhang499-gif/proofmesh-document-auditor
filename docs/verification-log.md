@@ -13,8 +13,8 @@
 ## ModelScope 轻量包
 
 - 文件：`proofmesh-modelscope-v0.1.0.zip`
-- 大小：小于 1MB；精确字节数以发布资产为准。
-- ZIP 条目：71 个。
+- 大小：小于 1MB；精确字节数与 SHA256 以发布资产和同名 `.sha256` 文件为准。
+- ZIP 条目：73 个。
 - 根目录 `SKILL.md`：1 个。
 - `.venv`、构建目录、运行报告、缓存、凭证、个人绝对路径和模型权重：0 个。
 - ZIP 内 `SKILL.md` 具备 `name`、`version`、`description`；仓库中的通用版不含非标准顶层 `version`。
@@ -34,8 +34,19 @@
 - 输入文件处理前后 SHA256 全部相同。
 - 离线热运行编号：`20260824T105022Z-cf169fdc`。
 
+## Qoder CLI 实机矩阵
+
+- Qoder CLI 1.1.28 已登录，`proofmesh-document-auditor` 已识别并启用。
+- 自动触发 6/6、手动触发 2/2、负向路由 2/2，总计 10/10 通过；所有进程退出状态为 0。
+- 7 个测试输入文件的 SHA256 在执行前后不变；7 个审计运行的 `input_manifest.json` 均满足 `before == after`。
+- 扫描 PDF 返回 `partial` 与 `needs_ocr`；损坏 XLSX 返回 `partial`、文件状态 `error`，并在 `run.json.errors` 中留下错误。
+- 实测发现的 Windows 控制台乱码已通过固定 UTF-8 I/O 修正；隐私说明已明确区分本地源文件、完整报告与进入 Agent 对话的精简摘要。两项均已追加 Qoder 回归。
+- 服务关闭后由本地客户端自动重启，并在 Qoder session 中完成新审计；恢复运行编号为 `20260824T115246Z-aece63b7`。
+- Skill 已明确 locator 不是源文档页面截图；查询同一运行的回归 session 准确说明报告内容且没有重新扫描。
+- 逐条证据：`docs/evidence/qoder/2026-08-24-cli-session-log.md`。
+
 ## 仍需平台侧完成
 
 - ModelScope 公开 Skill 上传与页面回读。
-- Qoder 1.1.28 已识别并启用 `proofmesh-document-auditor`；账号登录、10 次触发矩阵、截图和录屏仍待完成。
+- Qoder 展示截图与完整录屏；CLI session 和结构化运行工件已完成。
 - 研习社文章发布与 `Intel AI PC` 专题标签回读。

@@ -9,6 +9,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+[Console]::InputEncoding = $Utf8NoBom
+[Console]::OutputEncoding = $Utf8NoBom
+$OutputEncoding = $Utf8NoBom
+$env:PYTHONUTF8 = '1'
+$env:PYTHONIOENCODING = 'utf-8'
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $VenvPython = Join-Path $ProjectRoot '.venv\Scripts\python.exe'
 $Python = if (Test-Path -LiteralPath $VenvPython) { $VenvPython } else { 'python' }
@@ -20,4 +26,3 @@ if ($RunId) { $Arguments += @('--run-id', $RunId) }
 
 & $Python @Arguments
 exit $LASTEXITCODE
-

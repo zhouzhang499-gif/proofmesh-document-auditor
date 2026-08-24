@@ -3,7 +3,7 @@
 > 适用版本：0.1.0  
 > 比赛截止：2026-08-31 15:59  
 > 内部提交目标：2026-08-31 12:00  
-> 当前状态：代码、评测、公开仓库与 GitHub Release 已完成；ModelScope 上传、Qoder 实机矩阵和录屏待完成。未勾选项目不得写成已完成。
+> 当前状态：代码、评测、公开仓库、GitHub Release 与 Qoder CLI 实机矩阵已完成；ModelScope 上传、Qoder 展示截图和录屏待完成。未勾选项目不得写成已完成。
 
 这份清单用于最终发布门禁。执行人应在每个完成项后补充证据路径、公开链接或命令输出。平台页面、ZIP 结构和录屏都需要回读，不能只凭上传成功提示判断完成。
 
@@ -14,10 +14,9 @@
 - [x] frontmatter 包含 `name: proofmesh-document-auditor`、`version: 0.1.0` 和准确的 `description`。
   - 证据：`dist/proofmesh-modelscope-v0.1.0.zip` 中的 `SKILL.md`。
 - [x] ModelScope 专用 ZIP 小于 5MB。
-  - 证据：`dist/proofmesh-modelscope-v0.1.0.zip`，当前发布候选小于 1MB；最终字节数以打包命令输出为准。
-  - 最终证据：`proofmesh-modelscope-v0.1.0.zip` 小于 1MB；精确字节数以打包输出为准，避免归档内容自指。
+  - 证据：`dist/proofmesh-modelscope-v0.1.0.zip` 小于 1MB；精确字节数与 SHA256 由同名 `.sha256` 文件和打包输出记录，避免归档内容自指。
 - [x] ZIP 不含 `.venv`、`.build`、运行报告、缓存、凭证、个人绝对路径和大型模型权重。
-  - 证据：ZIP 回读 71 个条目；禁入项计数为 0。
+  - 证据：ZIP 回读 73 个条目；禁入项和敏感文本命中数均为 0。
 - [x] ZIP SHA256 已计算并写入发布记录。
   - 证据：打包脚本同时生成 `dist/proofmesh-modelscope-v0.1.0.zip.sha256`，避免把归档自身哈希写进归档。
 - [x] 英文名称为 `proofmesh-document-auditor`，展示名称为“ProofMesh 文档一致性检查”。
@@ -92,17 +91,17 @@
 ## E. Qoder 实机验证
 
 - [x] 最终 Skill 已由 Qoder 1.1.28 在用户级目录识别并启用。
-- [ ] [`qoder-test-matrix.md`](qoder-test-matrix.md) 的 6 条自动触发测试全部执行。
-- [ ] 2 条 `/proofmesh-document-auditor` 手动触发测试全部执行。
-- [ ] 2 条不应触发的请求没有调用 ProofMesh。
-- [ ] 10 条测试都有截图、实际参数、退出状态、`run_id` 或“不适用”记录。
-- [ ] 连续运行 10 次无服务失联。
-- [ ] 关闭服务后再次审计能够自动恢复。
-- [ ] Qoder 回复只含完成任务所需的摘要，没有粘贴完整敏感原文。
+- [x] [`qoder-test-matrix.md`](qoder-test-matrix.md) 的 6 条自动触发测试全部执行。
+- [x] 2 条 `/proofmesh-document-auditor` 手动触发测试全部执行。
+- [x] 2 条不应触发的请求没有调用 ProofMesh。
+- [ ] 10 条测试已有 session ID、退出状态、`run_id` 或“不适用”记录；逐条展示截图待补。
+- [x] 连续运行 10 次无服务失联。
+- [x] 关闭服务后再次审计能够自动恢复。
+- [x] Qoder 回复只含完成任务所需的摘要，没有粘贴完整文档原文；隐私边界明确说明精简摘要进入当前对话。
 - [ ] 录制一条完整视频，画面包含用户请求、Skill 调用和本地 HTML 报告。
-  - Qoder 版本：1.1.28；账号状态为未登录。
-  - 矩阵结果：【待填：通过数/10】
-  - 证据目录：【待填】
+  - Qoder 版本：1.1.28；账号状态为已登录。
+  - 矩阵结果：10/10 通过；另有 UTF-8、隐私表述、服务恢复和报告内容表述回归。
+  - 证据记录：`docs/evidence/qoder/2026-08-24-cli-session-log.md`
   - 录屏文件或链接：【待填】
 
 ## F. README、文章与展示材料

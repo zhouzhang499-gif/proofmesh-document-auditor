@@ -3,7 +3,7 @@
 > 文章状态：参赛发布稿草案  
 > 项目版本：0.1.0  
 > 最后核对：2026-08-24  
-> 尚待补充：公开 Skill 链接、源码仓库链接、Qoder 实机截图与录屏、性能与断网结果
+> 尚待补充：公开 Skill 链接、Qoder 展示截图与录屏、性能与断网结果
 
 咨询方案、项目预算、管理层汇报和合同摘要往往不是一个文件。它们由不同的人维护，也会在不同时间修改。单独打开每份材料时，1260 万元和 126 万元都像一个正常数字；等到汇报开始，跨文件的不一致才暴露出来。
 
@@ -17,7 +17,7 @@ ProofMesh 是一个面向交付前检查的本地 Skill。它读取用户指定�
 |---|---|---|
 | 真实生产力场景 | 检查项目交付文件夹中的跨格式事实漂移 | 四格式原创演示包、27 项自动测试和 100 条事实对评测已完成 |
 | 本地 AI 与 OpenVINO | 本地中文嵌入模型为近似指标候选打分 | CPU 链路已验证；GPU/NPU 未验证 |
-| 生产力 Agent 集成 | 以 Qoder 为首要宿主，支持自动与手动触发 | 十条实机矩阵待执行 |
+| 生产力 Agent 集成 | 以 Qoder 为首要宿主，支持自动与手动触发 | Qoder CLI 十条实机矩阵 10/10 通过；展示截图与录屏待补 |
 | 可复现与可商用基础 | 只读审计、结构化工件、Apache-2.0、第三方声明 | 公开发布包与公开页面待复验 |
 
 ## 场景从哪里来
@@ -119,7 +119,7 @@ ProofMesh 的解析、规则匹配、语义打分和报告生成都在本机完�
 
 Qoder 官方文档支持用户级和项目级 Skill。项目级目录为 `.qoder/skills/{skill-name}/SKILL.md`，用户级目录为 `~/.qoder/skills/{skill-name}/SKILL.md`；重启 Qoder 后可以通过自然语言自动触发，也可以输入 `/skill-name` 手动调用。参见 [Qoder Skills 文档](https://docs.qoder.com/extensions/skills)。
 
-以下步骤是本项目的 Qoder 验证流程。**截至本文最后核对时间，Qoder 十条实机矩阵仍待执行；这些步骤不能当成通过记录。**
+以下步骤已在 Qoder CLI 1.1.28 的登录账号中逐条执行。最终结果为自动触发 6/6、手动触发 2/2、负向路由 2/2，总计 10/10 通过。完整 session ID、`run_id`、输入哈希和回归记录见 [`docs/evidence/qoder/2026-08-24-cli-session-log.md`](evidence/qoder/2026-08-24-cli-session-log.md)。
 
 1. 将最终发布目录放到 `.qoder/skills/proofmesh-document-auditor/`，确认该目录下直接包含 `SKILL.md`、`scripts/`、`src/`、`rules/` 和运行依赖说明。
 2. 在 Windows PowerShell 中安装运行环境：
@@ -157,11 +157,11 @@ Qoder 官方文档支持用户级和项目级 Skill。项目级目录为 `.qoder
 
 仓库中的原创演示包包含 2 个 XLSX、1 个 DOCX、1 个 PPTX 和 1 个带文本层 PDF。`ground_truth.json` 记录了 2 个确定性问题和 1 个待确认候选。现有自动测试覆盖四种格式解析、证据位置、输入哈希不变、OpenVINO CPU 加载、损坏文件、扫描型 PDF、Excel 公式无缓存值和报告写作规则。
 
-2026-08-24 的最新本机复验使用 Windows 11、Python 3.11.9 和 OpenVINO 2026.3.0，27 项自动测试全部通过。此前同一环境的演示审计处理了 5 个支持文件，得到 2 个确定性问题和 1 个待确认候选；运行记录中的设备为 CPU，输入文件处理前后哈希一致。这是一轮开发机验证，公开发布前仍需保存正式测试日志，并在干净环境重跑。
+2026-08-24 的最新本机复验使用 Windows 11、Python 3.11.9 和 OpenVINO 2026.3.0，27 项自动测试全部通过。同一环境的演示审计处理了 5 个支持文件，得到 2 个确定性问题和 1 个待确认候选；运行记录中的设备为 CPU，输入文件处理前后哈希一致。Qoder CLI 随后完成十条路由与交互测试，所有进程退出状态均为 0。
 
 量化评测包含 100 条可复现事实对：40 条明确冲突、40 条明确一致和 20 条困难样例。每条样例都经过项目实际的 `parse_fact` 归一化和 `find_issues` 确定性规则。最新结果为 TP=50、FP=0、FN=0、TN=50，Precision、Recall、F1 与 Accuracy 均为 100%；明确样例与困难样例的正确率都是 100%，定位字段完整率为 100%。数据集 SHA256 为 `7c8ef65a3e732eb416617563fcc711d96e1f2dd7ab3bb7ea7f0f27752ac69a8f`。
 
-这组数据用于验证事实解析与确定性规则，不能外推为任意真实文档都能达到 100%。它不覆盖 Qoder 路由、扫描 PDF OCR、语义候选 Top-3 召回、冷启动和热运行性能。完整结果与逐样例记录保存在 [`evaluation/results/evaluation.md`](../evaluation/results/evaluation.md) 和 [`evaluation/results/evaluation.json`](../evaluation/results/evaluation.json)。
+这组数据用于验证事实解析与确定性规则，不能外推为任意真实文档都能达到 100%。事实对评测本身不覆盖 Qoder 路由、扫描 PDF OCR、语义候选 Top-3 召回、冷启动和热运行性能；Qoder 路由由独立十条矩阵验证，扫描 PDF 当前仍明确标记为 `needs_ocr`。完整结果与逐样例记录保存在 [`evaluation/results/evaluation.md`](../evaluation/results/evaluation.md) 和 [`evaluation/results/evaluation.json`](../evaluation/results/evaluation.json)。
 
 | 指标 | 结果 | 证据 |
 |---|---:|---|
@@ -176,7 +176,7 @@ Qoder 官方文档支持用户级和项目级 Skill。项目级目录为 `.qoder
 | 模糊候选 Top-3 Recall | 未单独评测 | 当前数据集只评估确定性事实对 |
 | 冷启动耗时 | 【待填】 | 【待填：设备与运行日志】 |
 | 热运行耗时 | 【待填】 | 【待填：设备与运行日志】 |
-| Qoder 调用 | 【待填：通过数/10】 | 【待填：`docs/evidence/qoder/`】 |
+| Qoder 调用 | 10/10 | `docs/evidence/qoder/2026-08-24-cli-session-log.md` |
 | 断网热运行 | 【待填】 | 【待填：网络状态与运行记录】 |
 
 评测发布时还会写明 Windows、Python、OpenVINO 版本、CPU 型号、文件数量和页数构成。未达到目标的数据保留原值，不用“整体表现良好”代替误差分析。
@@ -207,4 +207,4 @@ Qoder 官方文档支持用户级和项目级 Skill。项目级目录为 `.qoder
 - 当前轻量包：小于 1MB；最终字节数与 SHA256 以 `dist` 中同名 `.sha256` 文件为准
 - 独立模型包 SHA256：`2df1ad03de1359859eb59ea168d770eaebd49634ed82e9a4f3e4d2b7e861a561`
 
-GitHub 源码、Release 资产和默认模型下载地址已经回读，轻量包也已在没有开发缓存的新目录完成安装与演示审计。ModelScope 页面、Qoder 对话截图和录屏仍按 [`docs/submission-checklist.md`](submission-checklist.md) 保留为待办，取得平台证据后再替换相应“待填”项。
+GitHub 源码、Release 资产和默认模型下载地址已经回读，轻量包也已在没有开发缓存的新目录完成安装与演示审计。Qoder CLI 十条矩阵已完成；ModelScope 页面、Qoder 展示截图和录屏仍按 [`docs/submission-checklist.md`](submission-checklist.md) 保留为待办，取得平台证据后再替换相应“待填”项。
