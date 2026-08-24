@@ -2,7 +2,7 @@
 
 > 状态：待实机执行  
 > 适用版本：ProofMesh 0.1.0  
-> Qoder 版本、Windows 版本、CPU、Python 与 OpenVINO 版本：【待填】
+> 已确认 Qoder CLI 版本为 1.1.28；Windows、CPU、Python 与 OpenVINO 版本需以正式录屏环境为准。当前 npm 全局安装缺少策略文件，Skill 发现与 10 次调用尚未执行，不将 CLI 版本检查写成实机通过。
 
 这份矩阵检查两件事：Qoder 能否在合适的请求中调用 ProofMesh，以及 Skill 能否把扫描范围、只读要求和结果边界执行到位。表中的“预期”不是实测结论；每条完成后必须补上截图、`run_id` 和本地工件。
 

@@ -199,11 +199,12 @@ Qoder 官方文档支持用户级和项目级 Skill。项目级目录为 `.qoder
 ## 发布信息
 
 - ModelScope Skill：【待填：公开 Skill 链接】
-- 源码仓库：【待填：公开仓库链接】
+- 源码仓库：[zhouzhang499-gif/proofmesh-document-auditor](https://github.com/zhouzhang499-gif/proofmesh-document-auditor)
+- GitHub Release：[ProofMesh v0.1.0](https://github.com/zhouzhang499-gif/proofmesh-document-auditor/releases/tag/v0.1.0)
 - 演示录屏：【待填：公开录屏链接】
 - License：Apache-2.0
 - 自定义标签：`AI PC`、`OpenVINO`、`文档一致性`、`本地隐私`、`交付质检`
 - 当前轻量包：小于 1MB；最终字节数与 SHA256 以 `dist` 中同名 `.sha256` 文件为准
 - 独立模型包 SHA256：`2df1ad03de1359859eb59ea168d770eaebd49634ed82e9a4f3e4d2b7e861a561`
 
-提交前将按 [`docs/submission-checklist.md`](submission-checklist.md) 回读公开页面、重新下载发布包并完成一次干净环境复验。只有完成这些检查，本文中的“待填”项目才会替换为可核对的结果。
+GitHub 源码、Release 资产和默认模型下载地址已经回读，轻量包也已在没有开发缓存的新目录完成安装与演示审计。ModelScope 页面、Qoder 对话截图和录屏仍按 [`docs/submission-checklist.md`](submission-checklist.md) 保留为待办，取得平台证据后再替换相应“待填”项。

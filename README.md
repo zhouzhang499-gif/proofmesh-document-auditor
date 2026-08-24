@@ -6,6 +6,8 @@
 
 ProofMesh 会读取项目文件夹，在本机整理可比较的事实，并把冲突连回原始位置。当前版本支持 XLSX、DOCX、PPTX 和带文本层的 PDF。RapidFuzz 负责召回近似指标，本机 OpenVINO 中文嵌入模型负责打分；这类结果只进入待确认清单，不会冒充已经确认的冲突。
 
+源码与发布包见 [GitHub 仓库](https://github.com/zhouzhang499-gif/proofmesh-document-auditor) 和 [v0.1.0 Release](https://github.com/zhouzhang499-gif/proofmesh-document-auditor/releases/tag/v0.1.0)。
+
 ## 目前能做什么
 
 - 读取一个目录里的 XLSX、DOCX、PPTX 和数字 PDF，不修改源文件。
