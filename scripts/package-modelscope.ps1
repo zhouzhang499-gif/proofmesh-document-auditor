@@ -54,8 +54,8 @@ try {
     Copy-Item -LiteralPath (Join-Path $ProjectRoot 'models\bge-small-zh-v1.5-openvino\model-manifest.json') -Destination $ModelTarget
     Copy-Item -LiteralPath (Join-Path $ProjectRoot 'models\model-distribution.json') -Destination (Join-Path $Staging 'models\model-distribution.json')
 
-    # 通用 Agent Skill 规范不接受顶层 version；ModelScope 上传规范要求它。
-    # 仅在发布暂存文件中注入版本号，保持仓库内 SKILL.md 可被通用校验器接受。
+    # ModelScope 上传与 GitHub 直导都要求顶层 version。
+    # 兼容旧源码：仅在暂存文件缺少版本时补入，避免生成重复字段。
     $StagedSkillPath = Join-Path $Staging 'SKILL.md'
     $StagedSkillText = Get-Content -Raw -Encoding UTF8 -LiteralPath $StagedSkillPath
     if ($StagedSkillText -notmatch '(?m)^version\s*:') {

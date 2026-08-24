@@ -1,5 +1,6 @@
 ---
 name: proofmesh-document-auditor
+version: 0.1.0
 description: 在本机检查 DOCX、PPTX、XLSX 和 PDF 交付材料中的金额、百分比、日期、单位及同比环比冲突，并输出带文件位置的易读报告。用户要求跨文档核对、交付前质检、检查 PPT 与 Excel 或保护敏感文档时使用。
 ---
 
