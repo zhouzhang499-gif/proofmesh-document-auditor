@@ -37,5 +37,5 @@
 ## 仍需平台侧完成
 
 - ModelScope 公开 Skill 上传与页面回读。
-- Qoder Skill 发现、10 次触发矩阵、截图和录屏。
+- Qoder 1.1.28 已识别并启用 `proofmesh-document-auditor`；账号登录、10 次触发矩阵、截图和录屏仍待完成。
 - 研习社文章发布与 `Intel AI PC` 专题标签回读。
