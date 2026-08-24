@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-08-24T08:28:43.967530+00:00",
+  "runtime": {
+    "openvino": "2026.3.0-22451-8a17657b995-releases/2026/3",
+    "device": "CPU",
+    "pipeline": "openvino_genai.TextEmbeddingPipeline",
+    "pooling": "CLS",
+    "normalize": true
+  },
+  "model": {
+    "name": "bge-small-zh-v1.5",
+    "parameters": 24000000,
+    "license": "MIT",
+    "upstream_repo": "BAAI/bge-small-zh-v1.5",
+    "upstream_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "onnx_distribution_repo": "Qdrant/bge-small-zh-v1.5",
+    "onnx_distribution_revision": "46fbe35fd4374a00fee7de77dfddaeb6dd6a2c59"
+  },
+  "smoke_test": {
+    "query": "项目总预算",
+    "documents": [
+      "预算金额",
+      "团队人数"
+    ],
+    "cosine_scores": [
+      0.733035490002553,
+      0.47491273712003906
+    ]
+  },
+  "files": [
+    {
+      "name": "config.json",
+      "size": 739,
+      "sha256": "9088751d39abbf86ec3d19ffca92ad62ad19075f7e59712e6c71217fa125d1d3"
+    },
+    {
+      "name": "openvino_model.bin",
+      "size": 47386794,
+      "sha256": "6cff835b1f4169c3d22d9e5b2f7f6bc807c39e37425d237b34c1966ad8ca1895"
+    },
+    {
+      "name": "openvino_model.xml",
+      "size": 173167,
+      "sha256": "91edf2239ca60ff50f4e5d00b8833885aa09845b5f73db25812215f67884ad5b"
+    },
+    {
+      "name": "openvino_tokenizer.bin",
+      "size": 257821,
+      "sha256": "f44e73c092ff91cb4f4685c2f73c719d45fa56dd90f6b03b708fae87700ea301"
+    },
+    {
+      "name": "openvino_tokenizer.xml",
+      "size": 31676,
+      "sha256": "25d7d0696923293d898eac5b0ed9f77a84b79e74e02393afcc39fd7dfa3b1d42"
+    },
+    {
+      "name": "special_tokens_map.json",
+      "size": 125,
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+    },
+    {
+      "name": "tokenizer.json",
+      "size": 439125,
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "size": 367,
+      "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a"
+    },
+    {
+      "name": "vocab.txt",
+      "size": 109540,
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+    }
+  ]
+}

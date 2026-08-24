@@ -1,0 +1,8 @@
+{
+  "display_name": "ProofMesh 文档一致性检查",
+  "description": "在本机核对多份交付材料中的金额、日期、单位和指标口径，并给出可回到源文件的证据。",
+  "version": "0.1.0",
+  "scenario": "delivery-quality-assurance",
+  "tags": ["AI PC", "OpenVINO", "document audit", "local first"]
+}
+

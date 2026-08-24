@@ -1,0 +1,27 @@
+{
+  "expected_issue_count": 2,
+  "expected_review_candidate_count": 1,
+  "issues": [
+    {
+      "rule_id": "money_value_consistency",
+      "locators": [
+        "预算表!B2",
+        "汇报数据!B2"
+      ]
+    },
+    {
+      "rule_id": "growth_basis_consistency",
+      "locators": [
+        "预算表!B3",
+        "汇报数据!B3"
+      ]
+    }
+  ],
+  "review_candidates": [
+    {
+      "left_label": "项目实施费用",
+      "right_label": "项目执行费用",
+      "status": "needs_review"
+    }
+  ]
+}

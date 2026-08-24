@@ -1,0 +1,14 @@
+.venv/
+.proofmesh-test-home/
+.proofmesh-*-home/
+.build/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+models/*.partial
+models/bge-small-zh-v1.5-openvino/*
+!models/bge-small-zh-v1.5-openvino/model-manifest.json
+assets/proofmesh-icon-source.png

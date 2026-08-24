@@ -1,0 +1,43 @@
+version: 1
+name: proofmesh-plain-zh
+purpose: 让审计说明具体、克制、便于复核，不以规避检测器为目标。
+
+banned_phrases:
+  - 综上所述
+  - 总的来说
+  - 值得注意的是
+  - 众所周知
+  - 在这个过程中
+  - 让我们深入探讨
+  - 希望这能帮到你
+  - 真正重要的是
+  - 核心在于
+  - 本质上
+  - 赋能
+  - 抓手
+  - 闭环赋能
+
+banned_regex:
+  - code: binary_contrast
+    pattern: "不是.{0,40}而是"
+    message: 直接写结论，删掉讲解式对立句。
+  - code: staged_sequence
+    pattern: "先.{0,40}(再|然后)"
+    message: 只有顺序影响结果时才保留步骤句。
+  - code: generic_ending_question
+    pattern: "(你觉得呢|是不是很有启发|你有没有类似经历)[？?]?$"
+    message: 用事实、动作或明确限制收尾。
+
+report_rules:
+  preserve_fields:
+    - raw_value
+    - normalized_value
+    - relative_path
+    - locator
+    - document_hash
+    - rule_id
+  max_intro_sentences: 3
+  max_consecutive_parallel_items: 3
+  default_register: 项目交付说明
+  report_errors_fail_run: true
+

@@ -1,0 +1,8 @@
+{
+  "archive_url": "https://github.com/zhouzhang499-gif/proofmesh-document-auditor/releases/download/v0.1.0/proofmesh-openvino-model-v0.1.0.zip",
+  "archive_sha256": "2df1ad03de1359859eb59ea168d770eaebd49634ed82e9a4f3e4d2b7e861a561",
+  "archive_bytes": 43851093,
+  "license": "MIT",
+  "source": "BAAI/bge-small-zh-v1.5",
+  "upstream_revision": "7999e1d3359715c523056ef9478215996d62a620"
+}

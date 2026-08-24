@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proofmesh-document-auditor"
+version = "0.1.0"
+description = "Local, evidence-first consistency checks for Office and PDF delivery folders"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "ProofMesh Contributors" }]
+dependencies = [
+  "openpyxl==3.1.5",
+  "defusedxml==0.7.1",
+  "python-docx==1.2.0",
+  "python-pptx==1.0.2",
+  "pdfplumber>=0.11,<0.12",
+  "rapidfuzz>=3.14,<4",
+  "numpy>=2.4,<2.6",
+  "openvino==2026.3.0",
+  "openvino-tokenizers==2026.3.0.0",
+  "openvino-genai==2026.3.0.0",
+  "pydantic>=2.12,<3",
+  "PyYAML>=6,<7",
+  "Jinja2>=3.1,<4",
+]
+
+[project.optional-dependencies]
+scanned-pdf = ["pypdfium2>=5,<6", "Pillow>=12,<13"]
+model-build = ["transformers==5.15.1", "huggingface-hub==1.21.0"]
+test = ["pytest>=9,<10", "pytest-cov>=7,<8"]
+
+[project.scripts]
+proofmesh = "proofmesh.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

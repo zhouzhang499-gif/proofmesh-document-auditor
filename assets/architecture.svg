@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">ProofMesh 本地文档一致性审计架构</title>
+  <desc id="desc">Qoder 调用本地 Skill，依次完成原生解析、事实归一、确定性规则核验、OpenVINO 候选匹配，并生成脱敏摘要与本地完整报告。</desc>
+  <defs>
+    <style>
+      .bg{fill:#071a33}.panel{fill:#0d284d;stroke:#315a87;stroke-width:2}.accent{fill:#ff7a1a}.text{fill:#f6f9ff;font-family:"Microsoft YaHei",Arial,sans-serif}.muted{fill:#a9bfd9;font-family:"Microsoft YaHei",Arial,sans-serif}.line{stroke:#7fb4ec;stroke-width:4;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#7fb4ec"/></marker>
+  </defs>
+  <rect class="bg" width="1200" height="680" rx="36"/>
+  <text class="text" x="60" y="70" font-size="32" font-weight="700">ProofMesh：文件留在本机，结论带回原始位置</text>
+  <text class="muted" x="60" y="106" font-size="18">确定性规则确认冲突，OpenVINO 只处理模糊候选</text>
+
+  <rect class="panel" x="60" y="165" width="190" height="128" rx="18"/>
+  <text class="text" x="155" y="215" font-size="22" text-anchor="middle" font-weight="700">Qoder / Agent</text>
+  <text class="muted" x="155" y="250" font-size="17" text-anchor="middle">自然语言触发 Skill</text>
+  <text class="muted" x="155" y="276" font-size="17" text-anchor="middle">只接收精简摘要</text>
+
+  <rect class="panel" x="305" y="165" width="210" height="128" rx="18"/>
+  <text class="text" x="410" y="210" font-size="22" text-anchor="middle" font-weight="700">本地解析</text>
+  <text class="muted" x="410" y="244" font-size="16" text-anchor="middle">XLSX · DOCX · PPTX</text>
+  <text class="muted" x="410" y="270" font-size="16" text-anchor="middle">带文本层 PDF</text>
+
+  <rect class="panel" x="570" y="165" width="210" height="128" rx="18"/>
+  <text class="text" x="675" y="210" font-size="22" text-anchor="middle" font-weight="700">事实台账</text>
+  <text class="muted" x="675" y="244" font-size="16" text-anchor="middle">金额 · 日期 · 百分比</text>
+  <text class="muted" x="675" y="270" font-size="16" text-anchor="middle">文件位置与输入哈希</text>
+
+  <rect class="panel" x="835" y="145" width="305" height="168" rx="18"/>
+  <text class="text" x="987" y="192" font-size="22" text-anchor="middle" font-weight="700">核验层</text>
+  <circle class="accent" cx="882" cy="231" r="7"/>
+  <text class="muted" x="902" y="237" font-size="16">确定性规则：确认冲突</text>
+  <circle fill="#2b91ff" cx="882" cy="270" r="7"/>
+  <text class="muted" x="902" y="276" font-size="16">OpenVINO：待复核候选</text>
+
+  <path class="line" d="M250 229 H295"/><path class="line" d="M515 229 H560"/><path class="line" d="M780 229 H825"/>
+
+  <rect class="panel" x="250" y="415" width="320" height="150" rx="18"/>
+  <text class="text" x="410" y="462" font-size="22" text-anchor="middle" font-weight="700">Agent 摘要</text>
+  <text class="muted" x="410" y="497" font-size="17" text-anchor="middle">数量、风险、文件位置</text>
+  <text class="muted" x="410" y="526" font-size="17" text-anchor="middle">默认不回传完整原文</text>
+
+  <rect class="panel" x="630" y="415" width="320" height="150" rx="18"/>
+  <text class="text" x="790" y="462" font-size="22" text-anchor="middle" font-weight="700">本地完整报告</text>
+  <text class="muted" x="790" y="497" font-size="17" text-anchor="middle">HTML · Markdown · JSON</text>
+  <text class="muted" x="790" y="526" font-size="17" text-anchor="middle">原文证据、规则与运行记录</text>
+
+  <path class="line" d="M940 313 C900 370 650 365 520 405"/>
+  <path class="line" d="M1030 313 C1045 375 930 390 875 405"/>
+  <text class="muted" x="60" y="630" font-size="16">边界：不修改源文件；扫描 PDF 当前只报告需要 OCR；候选项不冒充确定冲突。</text>
+</svg>
