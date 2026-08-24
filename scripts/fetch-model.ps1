@@ -2,6 +2,7 @@
 param(
     [string]$Url,
     [string]$Sha256,
+    [long]$Bytes,
     [switch]$Offline
 )
 
@@ -13,6 +14,7 @@ $Script = Join-Path $PSScriptRoot 'fetch_model.py'
 $Arguments = @($Script)
 if ($Url) { $Arguments += @('--url', $Url) }
 if ($Sha256) { $Arguments += @('--sha256', $Sha256) }
+if ($Bytes) { $Arguments += @('--bytes', $Bytes) }
 if ($Offline) { $Arguments += '--offline' }
 
 & $Python @Arguments

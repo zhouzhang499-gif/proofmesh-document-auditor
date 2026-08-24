@@ -8,7 +8,14 @@ from pathlib import Path
 import pytest
 
 from proofmesh.service import _model_dir
-from scripts.fetch_model import MODEL_NAME, default_destination, install_model, safe_extract, verify_model_dir
+from scripts.fetch_model import (
+    MODEL_NAME,
+    default_destination,
+    download_with_resume,
+    install_model,
+    safe_extract,
+    verify_model_dir,
+)
 
 
 def _manifest(files: dict[str, bytes]) -> dict:
@@ -80,3 +87,27 @@ def test_safe_extract_rejects_parent_traversal(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError, match="越界路径"):
         safe_extract(archive, tmp_path / "extract")
     assert not (tmp_path / "outside.txt").exists()
+
+
+def test_download_rejects_more_bytes_than_distribution_declares(tmp_path: Path) -> None:
+    source = tmp_path / "source.zip"
+    source.write_bytes(b"12345")
+    partial = tmp_path / "download.partial"
+
+    with pytest.raises(RuntimeError, match="超过发布清单声明大小"):
+        download_with_resume(source.as_uri(), partial, expected_bytes=4)
+    assert not partial.exists()
+
+
+def test_model_archive_rejects_undeclared_file(tmp_path: Path) -> None:
+    files = {"openvino_model.xml": b"xml", "openvino_model.bin": b"bin"}
+    manifest = _manifest(files)
+    archive = tmp_path / "model.zip"
+    with zipfile.ZipFile(archive, "w") as bundle:
+        for name, content in files.items():
+            bundle.writestr(f"{MODEL_NAME}/{name}", content)
+        bundle.writestr(f"{MODEL_NAME}/model-manifest.json", json.dumps(manifest))
+        bundle.writestr(f"{MODEL_NAME}/surprise.bin", b"unexpected")
+
+    with pytest.raises(RuntimeError, match="未声明文件"):
+        install_model(archive, tmp_path / "cache" / MODEL_NAME, manifest)

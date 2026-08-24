@@ -17,7 +17,7 @@
   - 证据：`dist/proofmesh-modelscope-v0.1.0.zip`，当前发布候选小于 1MB；最终字节数以打包命令输出为准。
   - 最终证据：`proofmesh-modelscope-v0.1.0.zip` 小于 1MB；精确字节数以打包输出为准，避免归档内容自指。
 - [x] ZIP 不含 `.venv`、`.build`、运行报告、缓存、凭证、个人绝对路径和大型模型权重。
-  - 证据：ZIP 回读 70 个条目；禁入项计数为 0。
+  - 证据：ZIP 回读 71 个条目；禁入项计数为 0。
 - [x] ZIP SHA256 已计算并写入发布记录。
   - 证据：打包脚本同时生成 `dist/proofmesh-modelscope-v0.1.0.zip.sha256`，避免把归档自身哈希写进归档。
 - [x] 英文名称为 `proofmesh-document-auditor`，展示名称为“ProofMesh 文档一致性检查”。
@@ -37,7 +37,7 @@
 - [x] 全新用户目录可以完成安装，不读取开发机的 `.venv`、`.build` 或下载缓存。
   - 安装命令：解压轻量包后执行 `scripts\install.ps1`。
   - 安装结果：锁定依赖、独立模型下载和四格式演示审计均成功。
-- [x] 模型完整时正常加载；文件缺失、大小错误、SHA256 错误和归档越界均有自动测试。
+- [x] 模型完整时正常加载；文件缺失、大小错误、SHA256 错误、下载超量、解压超量、未声明文件和归档越界均有自动测试。
 - [x] 模型缓存完成后，在不可达下载地址下热运行成功。
   - 证据：`run_id` 为 `20260824T105022Z-cf169fdc`，状态 `complete`。
 - [x] `model_info.json` 记录实际设备和 OpenVINO 版本。
@@ -70,7 +70,7 @@
   python -m pytest
   ```
 
-  - 最新结果：25/25 通过。
+  - 最新结果：27/27 通过。
   - 环境：Windows 11、Python 3.11.9、OpenVINO 2026.3.0；CPU 运行链已验证。
   - 复验记录：`docs/verification-log.md`
 

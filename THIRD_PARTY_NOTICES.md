@@ -15,6 +15,8 @@ ProofMesh currently depends on these runtime libraries:
 - Pydantic — MIT License
 - PyYAML — MIT License
 - Jinja2 — BSD-3-Clause License
+- setuptools — MIT License
+- wheel — MIT License
 
 The optional model-build environment also uses Transformers and Hugging Face Hub. They are not needed after the OpenVINO model assets have been built.
 

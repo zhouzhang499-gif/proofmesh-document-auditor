@@ -4,7 +4,7 @@ import argparse
 import hashlib
 import json
 import os
-import shutil
+import stat
 import sys
 import tempfile
 import urllib.error
@@ -64,9 +64,16 @@ def default_destination() -> Path:
     return (base / "ProofMesh" / "models" / MODEL_NAME).resolve()
 
 
-def download_with_resume(url: str, partial: Path) -> None:
+def download_with_resume(url: str, partial: Path, expected_bytes: int) -> None:
+    if expected_bytes <= 0:
+        raise RuntimeError("模型归档大小必须是正整数。")
     partial.parent.mkdir(parents=True, exist_ok=True)
     existing = partial.stat().st_size if partial.exists() else 0
+    if existing > expected_bytes:
+        partial.unlink()
+        raise RuntimeError("现有模型下载临时文件超过声明大小，已删除。")
+    if existing == expected_bytes:
+        return
     headers = {"User-Agent": "ProofMesh/0.1.0"}
     if existing:
         headers["Range"] = f"bytes={existing}-"
@@ -75,24 +82,68 @@ def download_with_resume(url: str, partial: Path) -> None:
         with urllib.request.urlopen(request, timeout=60) as response:
             append = existing > 0 and getattr(response, "status", None) == 206
             mode = "ab" if append else "wb"
+            received = existing if append else 0
             with partial.open(mode) as handle:
-                shutil.copyfileobj(response, handle, length=1024 * 1024)
+                while block := response.read(1024 * 1024):
+                    received += len(block)
+                    if received > expected_bytes:
+                        handle.close()
+                        partial.unlink(missing_ok=True)
+                        raise RuntimeError("模型下载超过发布清单声明大小，已停止并删除临时文件。")
+                    handle.write(block)
     except urllib.error.HTTPError as exc:
-        if exc.code == 416 and partial.exists():
+        if exc.code == 416 and partial.exists() and partial.stat().st_size == expected_bytes:
             return
         raise RuntimeError(f"模型下载失败，HTTP {exc.code}：{url}") from exc
     except urllib.error.URLError as exc:
         raise RuntimeError(f"模型下载失败：{exc.reason}") from exc
+    if partial.stat().st_size != expected_bytes:
+        raise RuntimeError(
+            f"模型下载尚不完整：期望 {expected_bytes} bytes，实际 {partial.stat().st_size} bytes。可重试续传。"
+        )
 
 
-def safe_extract(archive: Path, destination: Path) -> Path:
+def safe_extract(archive: Path, destination: Path, expected_sizes: dict[str, int] | None = None) -> Path:
     destination.mkdir(parents=True, exist_ok=True)
     destination_root = destination.resolve()
+    expected_sizes = expected_sizes or {}
+    maximum_entries = len(expected_sizes) + 2 if expected_sizes else 64
+    maximum_uncompressed = sum(expected_sizes.values()) + 1024 * 1024 if expected_sizes else 512 * 1024 * 1024
+    seen_files: set[str] = set()
+    total_uncompressed = 0
     with zipfile.ZipFile(archive) as bundle:
+        if len(bundle.infolist()) > maximum_entries:
+            raise RuntimeError("模型包条目数量超过允许上限。")
         for item in bundle.infolist():
-            target = (destination / item.filename).resolve()
+            normalized = item.filename.replace("\\", "/")
+            parts = tuple(part for part in normalized.split("/") if part not in {"", "."})
+            if not parts or normalized.startswith("/") or ".." in parts:
+                raise RuntimeError(f"模型包包含越界路径：{item.filename}")
+            target = destination.joinpath(*parts).resolve()
             if target != destination_root and not target.is_relative_to(destination_root):
                 raise RuntimeError(f"模型包包含越界路径：{item.filename}")
+            unix_mode = (item.external_attr >> 16) & 0xFFFF
+            if stat.S_ISLNK(unix_mode):
+                raise RuntimeError(f"模型包包含符号链接：{item.filename}")
+            if item.is_dir():
+                continue
+            inner_parts = parts[1:] if parts[0] == MODEL_NAME else parts
+            inner_name = "/".join(inner_parts)
+            if expected_sizes and inner_name not in expected_sizes and inner_name != "model-manifest.json":
+                raise RuntimeError(f"模型包包含未声明文件：{item.filename}")
+            if inner_name in seen_files:
+                raise RuntimeError(f"模型包包含重复文件：{item.filename}")
+            seen_files.add(inner_name)
+            if inner_name in expected_sizes and item.file_size != expected_sizes[inner_name]:
+                raise RuntimeError(f"模型包内 {inner_name} 的声明大小不符。")
+            if inner_name == "model-manifest.json" and item.file_size > 1024 * 1024:
+                raise RuntimeError("模型包内 model-manifest.json 超过 1MB。")
+            total_uncompressed += item.file_size
+            if total_uncompressed > maximum_uncompressed:
+                raise RuntimeError("模型包解压后大小超过允许上限。")
+        if expected_sizes and not set(expected_sizes).issubset(seen_files):
+            missing = sorted(set(expected_sizes) - seen_files)
+            raise RuntimeError("模型包缺少清单文件：" + "、".join(missing))
         bundle.extractall(destination)
     nested = destination / MODEL_NAME
     return nested if nested.is_dir() else destination
@@ -100,14 +151,17 @@ def safe_extract(archive: Path, destination: Path) -> Path:
 
 def install_model(archive: Path, destination: Path, manifest: dict) -> str | None:
     destination.parent.mkdir(parents=True, exist_ok=True)
+    expected_sizes = {item["name"]: int(item["size"]) for item in manifest.get("files", [])}
     with tempfile.TemporaryDirectory(prefix="proofmesh-model-", dir=destination.parent) as temp_name:
-        extracted = safe_extract(archive, Path(temp_name))
+        extracted = safe_extract(archive, Path(temp_name), expected_sizes)
         errors = verify_model_dir(extracted, manifest)
         if errors:
             raise RuntimeError("模型包校验失败：" + "；".join(errors))
         archive_manifest = extracted / "model-manifest.json"
         if not archive_manifest.is_file():
             raise RuntimeError("模型包缺少 model-manifest.json")
+        if load_manifest(archive_manifest) != manifest:
+            raise RuntimeError("模型包内 model-manifest.json 与发布清单不一致。")
 
         backup: Path | None = None
         if destination.exists():
@@ -126,6 +180,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="下载并校验 ProofMesh OpenVINO 模型")
     parser.add_argument("--url", help="模型 ZIP 地址；默认读取清单或 PROOFMESH_MODEL_URL")
     parser.add_argument("--sha256", help="模型 ZIP 的 SHA256；默认读取模型清单")
+    parser.add_argument("--bytes", type=int, help="模型 ZIP 的精确字节数；默认读取发布清单")
     parser.add_argument("--destination", type=Path, default=default_destination())
     parser.add_argument("--offline", action="store_true", help="只验证现有模型，不访问网络")
     args = parser.parse_args()
@@ -151,12 +206,13 @@ def main() -> int:
     )
     url = args.url or os.environ.get("PROOFMESH_MODEL_URL") or distribution.get("archive_url")
     expected_sha256 = args.sha256 or distribution.get("archive_sha256")
-    if not url or not expected_sha256:
-        raise RuntimeError("模型下载地址或归档 SHA256 尚未配置。请设置 PROOFMESH_MODEL_URL，或更新模型清单。")
+    expected_bytes = args.bytes or distribution.get("archive_bytes")
+    if not url or not expected_sha256 or not isinstance(expected_bytes, int) or expected_bytes <= 0:
+        raise RuntimeError("模型下载地址、归档 SHA256 或归档字节数尚未配置。请更新模型发布清单。")
 
     downloads = destination.parent / ".downloads"
     partial = downloads / f"{MODEL_NAME}.zip.partial"
-    download_with_resume(url, partial)
+    download_with_resume(url, partial, expected_bytes)
     actual_sha256 = sha256_file(partial)
     if actual_sha256 != expected_sha256:
         raise RuntimeError(
